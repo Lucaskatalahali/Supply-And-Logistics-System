@@ -17,7 +17,7 @@ The system is designed to manage supplies, inventory, and logistics operations i
 
 ## Screenshots
 
-![Home Page](assets/screenshots/home.png)
-![Home Page](assets/screenshots/products.png)
-![Home Page](assets/screenshots/orders.png)
-![Home Page](assets/screenshots/stock.png)
+![Home Page](assets/home.png)
+![Products](assets/products.png)
+![Orders](assets/orders.png)
+![Stock](assets/stock.png)
