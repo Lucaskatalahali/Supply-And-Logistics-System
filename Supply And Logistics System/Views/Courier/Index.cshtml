@@ -1,0 +1,72 @@
+﻿@model List<Supply_And_Logistics_System.Models.Orders.Order>
+
+<h2 class="mb-4">Courier Panel — Orders In Transit</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No orders assigned to you.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Order</th>
+                <th>Items</th>
+                <th>Carrier</th>
+                <th>Tracking</th>
+                <th>📍 Delivery Address</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>#@order.Id</strong><br />
+                        <small class="text-muted">@order.OrderDate.ToString("dd/MM/yyyy")</small>
+                    </td>
+                    <td>
+                        @foreach (var item in order.Items)
+                        {
+                            <div>
+                                @item.Product.Name
+                                <span class="badge bg-secondary">x(@item.Quantity)</span>
+                            </div>
+                        }
+                </td>
+                <td>
+                    <span class="badge bg-info text-dark">@order.CarrierCompany</span>
+                </td>
+                <td><code>@order.TrackingNumber</code></td>
+                <td>
+                    <span class="text-primary fw-bold">
+                        <i class="bi bi-geo-alt-fill me-1"></i>
+                        @(string.IsNullOrEmpty(order.DeliveryAddress)
+                                            ? "No address"
+                                            : order.DeliveryAddress)
+                </span>
+            </td>
+            <td><strong>@order.TotalPrice.ToString("0.00") €</strong></td>
+            <td class="d-flex gap-2">
+                <form asp-action="Deliver" method="post">
+                    <input type="hidden" name="orderId" value="@order.Id" />
+                    <button class="btn btn-success btn-sm">
+                        ✓ Delivered
+                    </button>
+                </form>
+                <form asp-action="RequestReturn" method="post">
+                    <input type="hidden" name="orderId" value="@order.Id" />
+                    <button class="btn btn-warning btn-sm"
+                            onclick="return confirm('Mark as defective and return to warehouse?')">
+                        ↩ Return
+                    </button>
+                </form>
+            </td>
+        </tr>
+                }
+        </tbody>
+    </table>
+}

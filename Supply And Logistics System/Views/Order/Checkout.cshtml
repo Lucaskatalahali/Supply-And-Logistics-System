@@ -1,0 +1,121 @@
+﻿@model Supply_And_Logistics_System.Models.Cart.Cart
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2 class="mb-4">Checkout</h2>
+
+@if (Model == null || !Model.Items.Any())
+{
+    <div class="alert alert-info">
+        Your cart is empty.
+    </div>
+}
+else
+{
+    var subtotal = Model.Items.Sum(x => x.Product.GetPrice() * x.Quantity);
+
+    <div class="alert alert-info mb-3">
+        <h4>Subtotal: <strong>@subtotal.ToString("0.00") €</strong></h4>
+        <small class="text-muted">Shipping + options calculated at checkout</small>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.GetPrice().ToString("0.00") €</td>
+                    <td>@item.Quantity</td>
+                    <td>@((item.Product.GetPrice() * item.Quantity).ToString("0.00")) €</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <!-- CREDIT CARD -->
+    <div class="card p-3 mb-4">
+        <h4>Credit Card Payment</h4>
+
+        <form asp-controller="Order" asp-action="Checkout" method="post">
+
+            <input type="hidden" name="paymentType" value="creditcard" />
+
+            <input type="text" name="cardNumber" class="form-control mb-2" placeholder="Card Number" required />
+            <input type="text" name="cardHolder" class="form-control mb-2" placeholder="Card Holder" required />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" name="expiryDate" class="form-control" placeholder="Expiry" required />
+                </div>
+                <div class="col-md-6">
+                    <input type="number" name="cvv" class="form-control" placeholder="CVV" required />
+                </div>
+            </div>
+
+            <hr />
+
+            <label>Carrier</label>
+            <select name="carrierType" class="form-control mb-2">
+                <option value="aras">Aras</option>
+                <option value="yurtici">Yurtici</option>
+                <option value="globalexpress">Global Express</option>
+            </select>
+
+            <!-- DECORATORS (SEM hidden inputs!) -->
+            <div class="form-check">
+                <input type="checkbox" name="addInsurance" value="true" class="form-check-input" />
+                <label class="form-check-label">Insurance (+50€)</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" name="addFragileProtection" value="true" class="form-check-input" />
+                <label class="form-check-label">Fragile Protection (+25€)</label>
+            </div>
+
+            <button class="btn btn-primary mt-3">Pay</button>
+        </form>
+    </div>
+
+    <!-- BANK -->
+    <div class="card p-3">
+        <h4>Bank Transfer</h4>
+
+        <form asp-controller="Order" asp-action="Checkout" method="post">
+
+            <input type="hidden" name="paymentType" value="banktransfer" />
+
+            <label>Carrier</label>
+            <select name="carrierType" class="form-control mb-2">
+                <option value="aras">Aras</option>
+                <option value="yurtici">Yurtici</option>
+                <option value="globalexpress">Global Express</option>
+            </select>
+
+            <div class="form-check">
+                <input type="checkbox" name="addInsurance" value="true" class="form-check-input" />
+                <label>Insurance</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" name="addFragileProtection" value="true" class="form-check-input" />
+                <label>Fragile Protection</label>
+            </div>
+
+            <button class="btn btn-success mt-2">Confirm</button>
+        </form>
+    </div>
+}

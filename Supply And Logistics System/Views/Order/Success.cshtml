@@ -1,0 +1,28 @@
+﻿@model Supply_And_Logistics_System.Models.Orders.Order
+
+<h2>Order Successful</h2>
+
+<div class="card p-3 mt-3">
+
+    <p><strong>Order ID:</strong> @Model.Id</p>
+    <p><strong>Date:</strong> @Model.OrderDate</p>
+
+    <hr />
+
+    <p><strong>Products Total:</strong> @(Model.TotalPrice - Model.ShippingCost) €</p>
+    <p><strong>Shipping:</strong> @Model.ShippingCost €</p>
+
+    <h4><strong>Total Paid:</strong> @Model.TotalPrice €</h4>
+
+    <hr />
+
+    <p><strong>Carrier:</strong> @Model.CarrierCompany</p>
+    <p><strong>Tracking:</strong> @Model.TrackingNumber</p>
+
+    <p><strong>Status:</strong> @Model.StateName</p>
+
+</div>
+
+<a href="/Product" class="btn btn-primary mt-3">
+    Back to Shop
+</a>

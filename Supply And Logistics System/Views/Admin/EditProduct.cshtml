@@ -1,0 +1,67 @@
+﻿@using Supply_And_Logistics_System.Models.Products
+@model Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<h2 class="mb-4">Edit Product</h2>
+
+<form asp-controller="Admin" asp-action="EditProduct" method="post">
+
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Product Name</label>
+        <input name="name" value="@Model.Name"
+               class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description"
+                  class="form-control">@Model.Description</textarea>
+    </div>
+
+    @if (Model is SimpleProduct)
+    {
+        <div class="mb-3">
+            <label class="form-label">Price (€)</label>
+            <input name="price" type="number" step="0.01"
+                   min="0.01"
+                   value="@Model.Price"
+                   class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Stock</label>
+            <input name="stock" type="number"
+                   min="0"
+                   value="@Model.Stock"
+                   class="form-control" required />
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            Composite product: Price and Stock are calculated automatically
+            from components.
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">Threshold</label>
+        <input name="threshold" type="number"
+               min="0"
+               value="@Model.Threshold"
+               class="form-control" required />
+    </div>
+
+    <button class="btn btn-primary">Update Product</button>
+
+    <a asp-controller="Admin" asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>

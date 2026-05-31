@@ -1,0 +1,94 @@
+﻿@using Supply_And_Logistics_System.Models.Products
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h2 class="mb-4">Create New Product</h2>
+
+<form asp-controller="Admin" asp-action="CreateProduct" method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Product Type</label>
+        <select id="productType" name="productType" class="form-control" required>
+            <option value="simple">Simple Product</option>
+            <option value="composite">Composite Product (Pack)</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Product Name</label>
+        <input name="name" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control"></textarea>
+    </div>
+
+    <div id="priceField" class="mb-3">
+        <label class="form-label">Price (€)</label>
+        <input name="price" type="number" step="0.01"
+               min="0.01" class="form-control" />
+    </div>
+
+    <div id="stockField" class="mb-3">
+        <label class="form-label">Stock</label>
+        <input name="stock" type="number"
+               min="0" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Threshold</label>
+        <input name="threshold" type="number"
+               min="0" class="form-control" />
+    </div>
+
+    <hr />
+
+    <div id="componentsField" class="mb-3">
+        <label class="form-label">Components</label>
+
+        @foreach (var p in ViewBag.Products ?? new List<Product>())
+        {
+            <div class="form-check">
+                <input type="checkbox"
+                       name="components"
+                       value="@p.Id"
+                       class="form-check-input" />
+                <label class="form-check-label">
+                    @p.Name — @p.GetPrice().ToString("0.00") € — Stock: @p.GetStock()
+                </label>
+            </div>
+        }
+    </div>
+
+    <button class="btn btn-success">Save Product</button>
+
+    <a asp-controller="Admin" asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+<script>
+    const type = document.getElementById("productType");
+    const price = document.getElementById("priceField");
+    const stock = document.getElementById("stockField");
+    const components = document.getElementById("componentsField");
+
+    function updateUI() {
+        if (type.value === "simple") {
+            price.style.display = "block";
+            stock.style.display = "block";
+            components.style.display = "none";
+        } else {
+            price.style.display = "none";
+            stock.style.display = "none";
+            components.style.display = "block";
+        }
+    }
+
+    type.addEventListener("change", updateUI);
+    updateUI();
+</script>

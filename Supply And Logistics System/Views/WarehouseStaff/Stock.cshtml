@@ -1,0 +1,99 @@
+﻿@using Supply_And_Logistics_System.Models.Products
+@model List<Supply_And_Logistics_System.Models.Products.Product>
+
+@{
+    ViewData["Title"] = "Stock Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Stock Management</h2>
+    <a asp-action="Index" class="btn btn-secondary">
+        ← Back to Dashboard
+    </a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Type</th>
+            <th>Current Stock</th>
+            <th>Threshold</th>
+            <th>Status</th>
+            <th>Add Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            var isLow = p.GetStock() <= p.Threshold;
+            var isComposite = p is CompositeProduct;
+
+            <tr class="@(isLow ? "table-warning" : "")">
+                <td>
+                    <strong>@p.Name</strong>
+                    <br />
+                    <small class="text-muted">@p.GetDescription()</small>
+                </td>
+                <td>
+                    <span class="badge @(isComposite ? "bg-info text-dark" : "bg-secondary")">
+                        @(isComposite ? "Composite" : "Simple")
+                    </span>
+                </td>
+                <td>
+                    <span class="fw-bold @(isLow ? "text-danger" : "text-success")">
+                        @p.GetStock()
+                    </span>
+                </td>
+                <td>@p.Threshold</td>
+                <td>
+                    @if (isLow)
+                    {
+                        <span class="badge bg-danger">⚠️ Low Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">✓ OK</span>
+                    }
+                </td>
+                <td>
+                    @if (!isComposite)
+                    {
+                        <form asp-action="AddStock" method="post"
+                              class="d-flex gap-2 align-items-center">
+
+                            <input type="hidden" name="productId" value="@p.Id" />
+
+                            <input type="number"
+                                   name="quantity"
+                                   value="1"
+                                   min="1"
+                                   class="form-control form-control-sm"
+                                   style="width: 80px;" />
+
+                            <button class="btn btn-success btn-sm">
+                                + Add
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <small class="text-muted">
+                            Add stock to components
+                        </small>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

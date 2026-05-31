@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Register User";
+}
+
+<h2 class="mb-4">Register New User</h2>
+
+<div style="max-width: 500px;">
+    <form asp-controller="Admin" asp-action="RegisterWorker" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Role</label>
+            <select name="role" id="roleSelect" class="form-control" required>
+                <option value="0">Admin</option>
+                <option value="2">Warehouse Staff</option>
+                <option value="3">Courier</option>
+            </select>
+        </div>
+
+        <!-- Company — só aparece se for Courier -->
+        <div class="mb-3" id="companyField" style="display:none;">
+            <label class="form-label">Company</label>
+            <select name="company" class="form-control">
+                <option value="aras">Aras</option>
+                <option value="yurtici">Yurtici</option>
+                <option value="globalexpress">Global Express</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">
+            Register
+        </button>
+
+        <a asp-controller="Admin" asp-action="Workers"
+           class="btn btn-secondary w-100 mt-2">
+            Cancel
+        </a>
+
+    </form>
+</div>
+
+<script>
+    const roleSelect = document.getElementById("roleSelect");
+    const companyField = document.getElementById("companyField");
+
+    function toggleCompany() {
+        companyField.style.display = roleSelect.value == "3" ? "block" : "none";
+    }
+
+    roleSelect.addEventListener("change", toggleCompany);
+    toggleCompany();
+</script>

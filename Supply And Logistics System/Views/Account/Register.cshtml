@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4">Create Account</h2>
+
+    <form asp-controller="Account" asp-action="Register" method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="name" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Delivery Address</label>
+            <input type="text" name="address" class="form-control"
+                   placeholder="e.g. Rua das Flores 123, Lisboa" required />
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Register</button>
+
+        <div class="mt-3 text-center">
+            <a asp-controller="Account" asp-action="Login">
+                Already have an account? Login
+            </a>
+        </div>
+
+    </form>
+</div>

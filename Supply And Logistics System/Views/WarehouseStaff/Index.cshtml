@@ -1,0 +1,99 @@
+﻿@using Supply_And_Logistics_System.Models.Products
+@model List<Supply_And_Logistics_System.Models.Orders.Order>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Warehouse Dashboard</h2>
+
+    <div class="d-flex gap-2">
+
+        <a asp-action="Stock" class="btn btn-success">
+            📦 Manage Stock
+        </a>
+
+        <a asp-action="Notifications" class="btn btn-warning position-relative">
+            🔔 Notifications
+            @if (ViewBag.NotificationCount > 0)
+            {
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    @ViewBag.NotificationCount
+                </span>
+            }
+        </a>
+
+    </div>
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Order</th>
+            <th>Items</th>
+            <th>Status</th>
+            <th>Carrier</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>
+                    <strong>#@order.Id</strong><br />
+                    <small class="text-muted">@order.OrderDate.ToString("dd/MM/yyyy")</small>
+                </td>
+                <td>
+                    @foreach (var item in order.Items)
+                    {
+                        <div>
+                            @item.Product.Name
+                            <span class="badge bg-secondary">x(@item.Quantity)</span>
+                            @if (item.Product is CompositeProduct cp)
+                            {
+                                <div class="small text-muted ms-2">
+                                    @foreach (var c in cp.Components)
+                                    {
+                                        <div>• @c.Name</div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+            </td>
+            <td>
+                <span class="badge
+                        @(order.StateName == "ConfirmedState" ? "bg-info text-dark" :
+                                                order.StateName == "InPreparationState" ? "bg-primary" :
+                                                order.StateName == "ReturnState" ? "bg-warning text-dark" : "bg-secondary")">
+                    @order.StateName.Replace("State", "")
+                </span>
+            </td>
+            <td>@order.CarrierCompany</td>
+            <td><strong>@order.TotalPrice.ToString("0.00") €</strong></td>
+            <td>
+                @if (order.StateName == "ConfirmedState")
+                    {
+                        <a asp-action="StartPreparation" asp-route-id="@order.Id"
+                           class="btn btn-primary btn-sm">
+                            Start Preparation
+                        </a>
+                    }
+                    @if (order.StateName == "InPreparationState")
+                    {
+                        <a asp-action="SendToShipping" asp-route-id="@order.Id"
+                           class="btn btn-success btn-sm">
+                            Send to Shipping
+                        </a>
+                    }
+                    @if (order.StateName == "ReturnState")
+                    {
+                        <a asp-action="StartPreparation" asp-route-id="@order.Id"
+                           class="btn btn-warning btn-sm">
+                            ↩ Reprocess (Returned)
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

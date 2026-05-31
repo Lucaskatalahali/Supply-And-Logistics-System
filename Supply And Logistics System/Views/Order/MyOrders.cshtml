@@ -1,0 +1,85 @@
+﻿@model List<Supply_And_Logistics_System.Models.Orders.Order>
+
+<h2>My Orders</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no orders yet.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Carrier</th>
+                <th>Tracking</th>
+                <th>Shipping</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.CarrierCompany</td>
+                    <td><code>@order.TrackingNumber</code></td>
+                    <td>@order.ShippingCost.ToString("0.00") €</td>
+                    <td><strong>@order.TotalPrice.ToString("0.00") €</strong></td>
+                    <td>
+                        <span class="badge
+                                    @(order.StateName == "PendingState" ? "bg-warning text-dark" :
+                                                            order.StateName == "ConfirmedState" ? "bg-info text-dark" :
+                                                            order.StateName == "InPreparationState" ? "bg-primary" :
+                                                            order.StateName == "InTransitState" ? "bg-secondary" :
+                                                            order.StateName == "DeliveredState" ? "bg-success" :
+                                                            order.StateName == "CancelledState" ? "bg-danger" :
+                                                            order.StateName == "ReturnState" ? "bg-warning text-dark" : "bg-light")">
+                    @order.StateName.Replace("State", "")
+                </span>
+            </td>
+            <td>
+                @* Customer pode cancelar só antes de InTransit *@
+                @if (order.StateName == "PendingState" ||
+                                order.StateName == "ConfirmedState" ||
+                                order.StateName == "InPreparationState")
+                        {
+                            <form asp-controller="Order" asp-action="Cancel" method="post">
+                                <input type="hidden" name="id" value="@order.Id" />
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Cancel this order?')">
+                                    Cancel Order
+                                </button>
+                            </form>
+                        }
+                        @* Delivered — fluxo termina *@
+                        @if (order.StateName == "DeliveredState")
+                        {
+                            <span class="text-success">✓ Delivered</span>
+                        }
+                        @* Cancelled *@
+                        @if (order.StateName == "CancelledState")
+                        {
+                            <span class="text-danger">✗ Cancelled</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

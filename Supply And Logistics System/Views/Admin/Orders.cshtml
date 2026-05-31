@@ -1,0 +1,76 @@
+﻿@model List<Supply_And_Logistics_System.Models.Orders.Order>
+
+@{
+    ViewData["Title"] = "Pending Orders";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Pending Orders</h2>
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-secondary">
+        ← Back to Admin Panel
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No pending orders.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Carrier</th>
+                <th>Shipping</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>#@order.Id</strong><br />
+                        <small class="text-muted">
+                            @order.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                        </small>
+                    </td>
+                    <td>User #@order.UserId</td>
+                    <td>
+                        @foreach (var item in order.Items)
+                        {
+                            <div>
+                                @item.Product.Name
+                                <span class="badge bg-secondary">x(@item.Quantity)</span>
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge bg-info text-dark">
+                            @order.CarrierCompany
+                        </span>
+                    </td>
+                    <td>@order.ShippingCost.ToString("0.00") €</td>
+                    <td><strong>@order.TotalPrice.ToString("0.00") €</strong></td>
+                    <td>
+                        <form asp-controller="Admin"
+                              asp-action="ApproveOrder"
+                              method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <button class="btn btn-success btn-sm"
+                                    onclick="return confirm('Approve this order?')">
+                                ✓ Approve
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

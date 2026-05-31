@@ -1,0 +1,146 @@
+﻿@model Supply_And_Logistics_System.Models.Cart.Cart
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2 class="mb-4">Shopping Cart</h2>
+
+@if (Model == null || Model.Items == null || !Model.Items.Any())
+{
+    <div class="alert alert-info">
+        Your cart is empty.
+    </div>
+
+    <a asp-controller="Product"
+       asp-action="Index"
+       class="btn btn-primary">
+        Continue Shopping
+    </a>
+}
+else
+{
+    var total = Model.Items.Sum(i => (i.Product?.GetPrice() ?? 0) * i.Quantity);
+
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th style="min-width:250px;">Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                var product = item.Product;
+                var stock = product?.GetStock() ?? 0;
+                var isComposite = product is Supply_And_Logistics_System.Models.Products.CompositeProduct;
+
+                <tr>
+                    <!-- PRODUCT INFO -->
+                    <td>
+                        <strong>@(product?.Name ?? "Unknown")</strong>
+
+                        @if (isComposite)
+                        {
+                            <span class="badge bg-info text-dark ms-2">Pack</span>
+                        }
+
+                        <br />
+
+                        <small class="text-muted">
+                            @(product?.GetDescription() ?? "")
+                        </small>
+
+                        @if (stock == 0)
+                        {
+                            <div class="text-danger small mt-1">
+                                Out of stock
+                            </div>
+                        }
+                    </td>
+
+                    <!-- PRICE -->
+                    <td>
+                        @(product?.GetPrice().ToString("0.00") ?? "0.00") €
+                    </td>
+
+                    <!-- QUANTITY -->
+                    <td>
+                        <form asp-controller="Cart"
+                              asp-action="Update"
+                              method="post"
+                              class="d-flex gap-2 align-items-center">
+
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+
+                            <input type="number"
+                                   name="quantity"
+                                   value="@item.Quantity"
+                                   min="1"
+                                   max="@stock"
+                                   class="form-control form-control-sm text-center"
+                                   style="width:80px;" />
+
+                            <button class="btn btn-primary btn-sm">
+                                Update
+                            </button>
+                        </form>
+                    </td>
+
+                    <!-- TOTAL -->
+                    <td>
+                        @(((product?.GetPrice() ?? 0) * item.Quantity).ToString("0.00")) €
+                    </td>
+
+                    <!-- REMOVE -->
+                    <td>
+                        <form asp-controller="Cart"
+                              asp-action="Remove"
+                              method="post">
+
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+
+                            <button class="btn btn-danger btn-sm">
+                                Remove
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <!-- TOTAL -->
+    <div class="d-flex justify-content-between align-items-center">
+
+        <div>
+            <h4>
+                Total: <strong>@total.ToString("0.00") €</strong>
+            </h4>
+            <small class="text-muted">
+                Shipping calculated at checkout
+            </small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-controller="Product"
+               asp-action="Index"
+               class="btn btn-secondary">
+                Continue Shopping
+            </a>
+
+            <a asp-controller="Order"
+               asp-action="Checkout"
+               class="btn btn-success btn-lg">
+                Checkout
+            </a>
+        </div>
+    </div>
+}

@@ -1,0 +1,87 @@
+﻿@model List<Supply_And_Logistics_System.Models.Products.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+    @foreach (var p in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 transition-hover">
+                <div class="card-body p-4">
+
+                    <!-- HEADER -->
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3 text-primary">
+                                <i class="bi bi-box-seam fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1 fw-bold text-dark">@p.Name</h5>
+                                @{
+                                    var isLow = p.GetStock() <= p.Threshold;
+                                    var stockBadge = isLow ? "text-danger bg-danger" : "text-success bg-success";
+                                }
+                                <span class="badge @stockBadge bg-opacity-10 rounded-pill px-3">
+                                    @p.GetStock() in stock
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <p class="card-text text-muted mb-4 small" style="min-height: 3rem;">
+                        @p.GetDescription()
+                    </p>
+
+                    <hr class="text-light opacity-50 mb-4" />
+
+                    <!-- FOOTER -->
+                    <div class="d-flex align-items-center justify-content-between mt-auto">
+                        <div>
+                            <span class="text-muted small d-block">Unit Price</span>
+                            <span class="fs-4 fw-bold text-dark">@p.GetPrice().ToString("N2") €</span>
+                        </div>
+
+                        <!-- Add to Cart — só para Customer -->
+                        @if (Context.Session.GetString("Role") == "Customer")
+                        {
+                            <form asp-controller="Product" asp-action="AddToCart" method="post"
+                                  class="d-flex gap-2 align-items-center bg-light p-2 rounded-3 border border-white shadow-sm">
+
+                                <input type="hidden" name="productId" value="@p.Id" />
+
+                                <input type="number"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="@p.GetStock()"
+                                       class="form-control form-control-sm border-0 bg-transparent text-center fw-bold"
+                                       style="width: 50px;" />
+
+                                <button type="submit" class="btn btn-primary btn-sm rounded-2 px-3 shadow-sm">
+                                    <i class="bi bi-cart-plus-fill me-1"></i> Add
+                                </button>
+
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Staff view</span>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important;
+    }
+</style>

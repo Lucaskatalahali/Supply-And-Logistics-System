@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 p-4">
+        <h1 class="text-primary mb-4"><i class="bi bi-shield-lock"></i> @ViewData["Title"]</h1>
+
+        <p class="lead">This Privacy Policy describes how the <strong> Lucas Supply System</strong> collects, uses, and protects user information during the use of this platform.</p>
+
+        <hr />
+
+        <section class="mb-4">
+            <h4 class="text-dark">1. Information We Collect</h4>
+            <p>To ensure the correct operation of the logistics flow, we process the following data:</p>
+            <ul>
+                <li><strong>Account Data:</strong> Name, email address, and system role (Admin, Warehouse, Courier, or Customer).</li>
+                <li><strong>Order Data:</strong> Purchase history, selected products, and shipping statuses.</li>
+                <li><strong>Logistics Data:</strong> Tracking numbers and delivery information provided by carriers.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">2. How We Use Your Data</h4>
+            <p>The collected data is used exclusively for:</p>
+            <ul>
+                <li>Inventory management and low-stock notifications.</li>
+                <li>Processing orders and calculating shipping costs via external carriers.</li>
+                <li>Role-based access control and security authentication.</li>
+                <li>System activity logging for auditing purposes (System Logs).</li>
+            </ul>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">3. Security and Sessions</h4>
+            <p>The system utilizes <strong>ASP.NET Core Sessions</strong> to maintain user security during navigation. Passwords are processed securely, and access to specific panels (Admin, Warehouse, and Courier) is restricted through strict authorization policies.</p>
+        </section>
+
+        <section class="mb-4">
+            <h4 class="text-dark">4. Third-Party Sharing</h4>
+            <p>Shipping details (such as weight and distance) are shared with external carrier services (e.g., Aras, Yurtici) solely for the purpose of generating shipping costs and tracking numbers.</p>
+        </section>
+
+        <footer class="mt-5">
+            <div class="alert alert-info border-0">
+                <small><strong>Academic Note:</strong> This system was developed for educational purposes. The data entered is used only to demonstrate software design patterns and supply chain business logic.</small>
+            </div>
+            <p class="text-muted small text-center">Last updated: @DateTime.Now.ToLocalTime().ToString("dd/MM/yyyy")</p>
+        </footer>
+    </div>
+</div>

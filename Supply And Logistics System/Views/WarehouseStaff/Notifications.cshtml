@@ -1,0 +1,65 @@
+﻿@using Supply_And_Logistics_System.Models.Notifications
+@model List<StockNotification>
+
+@{
+    ViewData["Title"] = "Stock Notifications";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Stock Notifications</h2>
+
+    @if (Model.Any())
+    {
+        <form asp-action="DeleteAllNotifications" method="post">
+            <button class="btn btn-danger"
+                    onclick="return confirm('Delete all notifications?')">
+                🗑 Delete All
+            </button>
+        </form>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-success">
+        ✅ No pending notifications.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Message</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var n in Model)
+            {
+                <tr>
+                    <td style="white-space: nowrap;">
+                        <small>@n.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                    </td>
+                    <td>
+                        <span class="text-warning fw-bold">⚠️</span>
+                        @n.Message
+                    </td>
+                    <td>
+                        <form asp-action="DeleteNotification" method="post">
+                            <input type="hidden" name="id" value="@n.Id" />
+                            <button class="btn btn-danger btn-sm">
+                                🗑 Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-2">
+    ← Back to Dashboard
+</a>

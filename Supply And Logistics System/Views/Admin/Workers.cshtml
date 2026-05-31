@@ -1,0 +1,67 @@
+﻿@using Supply_And_Logistics_System.Models.Identity
+@model List<User>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>System Users</h2>
+    <a asp-controller="Admin" asp-action="RegisterWorker"
+       class="btn btn-success">
+        + Register New User
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No users found.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Company</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <span class="badge
+                                    @(user.Role == Role.Admin ? "bg-danger" :
+                                                            user.Role == Role.WarehouseStaff ? "bg-primary" :
+                                                            user.Role == Role.Courier ? "bg-info text-dark" : "bg-secondary")">
+                    @user.Role
+                </span>
+            </td>
+            <td>@(user.Company ?? "—")</td>
+            <td>
+                <form asp-controller="Admin"
+                      asp-action="DeleteWorker"
+                      method="post">
+                    <input type="hidden" name="id" value="@user.Id" />
+                    <button class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this user?')">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+                }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Admin" asp-action="Index"
+   class="btn btn-secondary mt-2">
+    ← Back to Admin Panel
+</a>
