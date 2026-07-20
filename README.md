@@ -27,6 +27,12 @@ The application is a web-based supply and logistics management system designed t
 
 ---
 
+## 📄 Documentation
+
+The `docs` folder contains the original Project Specification
+
+---
+
 ## 📸 Screenshots
 
 ![Home Page](Supply%20And%20Logistics%20System/assets/home.png)
