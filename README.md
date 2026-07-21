@@ -2,7 +2,7 @@
 
 ![Academic Project](https://img.shields.io/badge/Academic_Project-Sakarya_University-blue)
 
-![Course](https://img.shields.io/badge/Course-Object-Oriented_Analysis_and_Design-blue)
+![Course](https://img.shields.io/badge/Course-Object_Oriented_Analysis_and_Design-blue)
 
 > 🎓 Part of my **[Computer Engineering Academic Portfolio](https://github.com/Lucaskatalahali/computer-engineering-projects)**.
 
