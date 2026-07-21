@@ -1,8 +1,10 @@
 # 🚚 Supply and Logistics Management System
 
-Academic project developed during the second year of my **Computer Engineering degree at Sakarya University**.
+![Academic Project](https://img.shields.io/badge/Academic_Project-Sakarya_University-blue)
 
-This project was developed for the **Object-Oriented Analysis and Design (OOAD)** course.
+![Course](https://img.shields.io/badge/Course-Object-Oriented_Analysis_and_Design-blue)
+
+> 🎓 Part of my **[Computer Engineering Academic Portfolio](https://github.com/Lucaskatalahali/computer-engineering-projects)**.
 
 The application is a web-based supply and logistics management system designed to manage products, inventory, and logistics operations in an organized and efficient way.
 
