@@ -65,19 +65,9 @@ The project applies several classic object-oriented design patterns:
 
 ## 📦 Order Workflow
 
-```
-Pending
-    ↓
-Confirmed
-    ↓
-In Preparation
-    ↓
-In Transit
-    ↓
-Delivered
-```
+The order lifecycle is implemented using a state-based workflow, ensuring that each order progresses through valid transitions.
 
-The complete order lifecycle is implemented using the **State Pattern**, allowing each order state to encapsulate its own behavior and transition rules.
+![Order State Diagram](./Diagrams/State_diagram.png)
 
 ---
 
