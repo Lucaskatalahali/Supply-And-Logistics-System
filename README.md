@@ -145,7 +145,6 @@ On the first startup, Entity Framework Core automatically applies all database m
 - **Department:** Computer Engineering
 - **Course:** Object-Oriented Analysis and Design
 - **Academic Year:** 2025–2026
-- **Project Grade:** 87/100
 
 ---
 
