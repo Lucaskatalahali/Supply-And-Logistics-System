@@ -84,9 +84,6 @@ The `docs` folder contains:
 
 ## 📸 Screenshots
 
-### Home Page
-
-![Home Page](Supply%20And%20Logistics%20System/assets/home.png)
 
 ### Products
 
@@ -95,10 +92,6 @@ The `docs` folder contains:
 ### Orders
 
 ![Orders](Supply%20And%20Logistics%20System/assets/orders.png)
-
-### Inventory
-
-![Inventory](Supply%20And%20Logistics%20System/assets/stock.png)
 
 ---
 
